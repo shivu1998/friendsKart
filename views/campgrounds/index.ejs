@@ -1,0 +1,177 @@
+<% include ../partials/header.ejs %>
+<script async src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+   
+<% if(loggedUser){ %>
+   <% if(!loggedUser.isAdmin){ %>
+    <div class="container">
+    <header class="jumbotron" >
+       <h1><img src="../stylesheets/friendship.png" /> friendsKart</h1>  
+      <p>
+       <form action="/campgrounds" method="GET" class="form-inline">
+        <div class="form-group">
+         <div id='container'>  
+  <div class='cell'><input type='search'name="search" placeholder='Search....' class="form-control"></div>
+  <div class='cell'><input type="submit" class='button' value="search"></div>
+</div>
+         </div>
+       </form>
+      </p>
+      <a href="/campgrounds/new" class="btn btn-success">Add a new Product</a>
+    </header>
+    <div class="response">
+     <div id="responsecontainer">
+            <div class="row  text-center display-flex" style="display:flex; flex-wrap:wrap;">
+          
+               <% camps.forEach(function(camp){ %>
+            <% if(camp.sale ){ %>
+             <div class="col-lg-3 col-xs-6">
+              <a href="/campgrounds/<%= camp._id %>">
+                <div class="thumbnail" style="border:1px solid #aeaeae">
+            <img class="img" src="<%= camp.image %>" >
+        <div class="caption">
+            <h4><%= camp.name %></h4>
+        
+     
+        </div>
+      </div>
+              </a>
+       
+       </div>
+   
+     <% } %>
+        
+    <% }); %>
+          
+          
+ 
+        </div>
+    
+    
+    </div>
+    </div>
+       
+    </div>
+	   <% }else{ %>
+       <div class="container">
+        <header class="jumbotron">
+        <h1>All products</h1>
+          <form action="/campgrounds" method="GET" class="form-inline">
+        <div class="form-group">
+         <div id='container'>  
+  <div class='cell'><input type='search'name="search" placeholder='Search....' class="form-control"></div>
+  <div class='cell'><input type="submit" class='button' value="search"></div>
+</div>
+         </div>
+       </form>
+        <a href="/master/users" class="btn btn-success">Current users</a>
+        <a href="/master/stats" class="btn btn-warning">Stats</a>
+
+        </header>
+        
+    <div class="row text-center display-flex " style="display:flex; flex-wrap:wrap;">
+       
+   
+  
+       
+    <% camps.forEach(function(camp){ %>
+      
+     <div class="col-lg-3 col-xs-6">
+     
+        <div class="thumbnail" style="border:1px solid #aeaeae">
+            
+                   <img class="img" src="<%= camp.image %>">
+        
+              
+        <div class="caption">
+            <h4><%= camp.name %></h4>
+            <h4>InSale:<%= camp.sale?"Yes":"No" %></h4>
+            <h4>Sold:<%= camp.sold?"Yes":"No" %></h4>
+        
+        <div style="padding-bottom:10px">
+             <div class="text-center">
+                 <form action="/campgrounds/<%= camp._id %>?_method=DELETE" method="POST" id="form-delete" style="display:inline">
+                    <button class="btn btn-danger" >Delete</button>
+                </form>
+                 <a href="/campgrounds/<%= camp._id %>" class="btn btn-success " style="padding-bottom:10px">Product Details</a>
+            </div>
+           
+        </div>
+        </div>
+        </div>
+       
+    </div>
+     
+      
+    <% }); %>
+    
+    </div>
+        </div>
+       </h1>
+      <% } %>
+     <% } else{ %>
+       <div class="container">
+    <header class="jumbotron" >
+       <h1><img src="../stylesheets/friendship.png" /> friendsKart</h1>  
+      <p></p>
+      <a href="/campgrounds/new" class="btn btn-success">Add a new Product</a>
+    </header>
+    <div class="response">
+     <div id="responsecontainer">
+            <div class="row  text-center display-flex" style="display:flex; flex-wrap:wrap;">
+          
+               <% camps.forEach(function(camp){ %>
+            <% if(camp.sale ){ %>
+             <div class="col-lg-3 col-xs-6">
+              <a href="/campgrounds/<%= camp._id %>">
+                <div class="thumbnail" style="border:1px solid #aeaeae">
+            <img class="img" src="<%= camp.image %>" >
+        <div class="caption">
+            <h4><%= camp.name %></h4>
+        
+     
+        </div>
+      </div>
+              </a>
+       
+       </div>
+   
+     <% } %>
+        
+    <% }); %>
+          
+          
+ 
+        </div>
+    
+    
+    </div>
+    </div>
+       
+    </div>
+     <% } %>
+<script>
+
+console.log("inside js");
+ 
+ function fetch_user()
+ {
+  console.log("inside ajax");
+  $.ajax({
+   url:"https://friendskart-shivu1998.c9users.io/getproducts",
+   type:"GET",
+   datatype:"json",
+   success:function(data){
+    $(".response").html(data);
+    
+   }
+  })
+ }
+ setInterval('fetch_user()', 1000);
+
+  
+</script>
+     
+     
+     
+     
+<% include ../partials/footer.ejs %>

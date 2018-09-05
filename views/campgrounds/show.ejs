@@ -1,0 +1,88 @@
+<% include ../partials/header2.ejs %>
+
+<div class="container">
+  <div class="row">
+   <div class="col-md-6 ">
+      <div class="thumbnail" >
+        <img  class="img-responsive" src="<%= camp.image %>" >
+        <div class="caption-full">
+          <div class="pull-right">
+              
+              <h1 ><%= camp.price %>&#x20b9</h1>
+               <p><%= camp.date.toDateString() %></p>
+         
+          </div>
+      
+          
+        
+        <h4><%= camp.name %></h4>
+        <p><%= camp.description %></p>
+        <p>
+          <em>Submitted by <strong><%= camp.author.username%></strong></em>
+        </p>
+        <% if(nanu && camp.author.id.equals(nanu._id)){ %>
+        <a href="/campgrounds/<%= camp._id %>/edit" class="btn btn-warning">Edit</a>
+        <form action="/campgrounds/<%= camp._id %>?_method=DELETE" method="POST" id="form-delete" style="display:inline">
+          <button class="btn btn-danger" >Delete</button>
+        </form>
+      <%    } else { %>
+      
+        <div class="text-right">
+         <% if((nanu && !nanu.isAdmin) || !nanu){ %>
+           <a href="/campgrounds/buy/<%= camp._id %>" class="btn btn-success">Buy</a>
+           <% }  %>
+            <% if(nanu && nanu.isAdmin){ %>
+           <a href="/campgrounds/buyer/<%= camp._id %>" class="btn btn-success">Seller Info</a>
+           <% } %>
+        </div>
+       
+      
+      <% } %>
+      </div>
+      </div>
+   </div>
+    <div class="col-md-6">
+     
+      <div class="well">
+        <div class="text-right">
+          <%  if(!nanu || !nanu.isAdmin){ %>
+          <form action="/campgrounds/<%= camp._id %>/comments" method="POST"  >
+            <div class="form-group">
+               <input class="form-control" type="text" placeholder="Comment...." name="comments[text]" autocomplete="off">
+               
+            </div>
+            <button class="btn btn-success btn-sm " >Add a comment</button>
+          </form>
+          
+       
+          <% } %>
+        </div>
+        <hr>
+          <% camp.comments.forEach(function(comment){ %>
+          <div class="row">
+            <div class="col-md-12">
+               <strong><%= comment.author.username %></strong>
+               <span class="pull-right"><%= camp.date.toDateString() %></span>
+                <p>
+                  <%= comment.text %>
+                </p>
+                <% if(nanu && comment.author.id.equals(nanu._id)) { %>
+                <a  class="btn btn-xs btn-link"  href="/campgrounds/<%= camp._id %>/comments/<%= comment._id %>/edit">Edit</a>
+                <form action="/campgrounds/<%= camp._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST" style="display:inline">
+                  <button class="btn btn-link">Delete</button> 
+                </form>
+                <% } else if(nanu && nanu.isAdmin){ %>
+          <form action="/campgrounds/<%= camp._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST" style="display:inline">
+                  <button class="btn btn-link">Delete</button> 
+                </form>
+          <% } %>
+          <% }); %>
+
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+
+<% include ../partials/footer.ejs %>
