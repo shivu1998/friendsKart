@@ -13,7 +13,6 @@ var User = require("./models/user");
 var methodOverride = require("method-override");
 var campgroundRoutes = require("./routes/campgrounds");
 var commentRoutes    = require("./routes/comments");
-var userRoutes = require("./routes/users");
 var indexRoutes      = require("./routes/index");
 
 
@@ -69,7 +68,7 @@ app.use(function(req,res,next)
 
 app.use(commentRoutes);
 app.use(indexRoutes);
-app.use(userRoutes);
+
 app.use(campgroundRoutes);
 
 app.use(compression());
