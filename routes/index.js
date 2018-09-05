@@ -408,7 +408,7 @@ router.get("/verifyagain/:token",function(req,res)
     function(done) {
        
       User.findOne({ verifyToken: req.params.token}, function(err, user) {
-        if (!user || !err) {
+        if (!user) {
          
           req.flash('error', 'Token is invalid');
           return res.redirect('back');
