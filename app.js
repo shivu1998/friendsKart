@@ -21,6 +21,7 @@ mongoose.connect(process.env.database_url);
 //mongoose.connect("mongodb://localhost/friendskart_v15");//last element specifies to name of the database and this
 // line is used to create a database.
 
+app.use(compression());
 
 app.use(express.static(__dirname+"/public"));
 
@@ -71,7 +72,7 @@ app.use(indexRoutes);
 
 app.use(campgroundRoutes);
 
-app.use(compression());
+
 
 app.listen(process.env.PORT,process.env.IP,function(){
     console.log("friendsKart Server has started");
