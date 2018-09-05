@@ -3,18 +3,15 @@ var express = require("express");
 var router  = express.Router();
 var User = require("../models/user");
 var passport = require("passport");
-var webpush = require("web-push");
 var multer = require('multer');
 var async = require("async");
 var nodemailer = require("nodemailer");
 var crypto = require("crypto");
-var moment = require("moment");
 var storage = multer.diskStorage({
     
   filename: function(req, file, callback) {
   
-      console.log("inside storage"+file);
-
+     
       
     callback(null, Date.now() + file.originalname);
      
@@ -23,8 +20,7 @@ var storage = multer.diskStorage({
 });
 var imageFilter = function (req, file, cb) {
     
-   console.log("inside imageFilter");
- console.log(file);
+  
  
     // accept image files only
     if (!file.originalname.match(/\.(jpg|jpeg|png|gif|webp)$/i)) {
@@ -102,7 +98,7 @@ router.get("/resend",isLoggedIn,async (req, res,next) => {
           'If you did not request this, please ignore this email.\n'
       };
       smtpTransport.sendMail(mailOptions, function(err) {
-        console.log('mail sent');
+      
         req.flash('success', 'An e-mail has been sent to ' + user.email + 'to verify.');
         done(err, 'done');
       });
@@ -131,7 +127,7 @@ router.post("/register",upload.single("userImage"), async(req, res,next)=>
 {
     if(req.body.check){
      await cloudinary.v2.uploader.upload(req.file.path,{crop: "thumb", width:442, height: 350,quality:"auto",fetch_format:"auto",flags:"lossy" },async (err,result) =>{
-        console.log("user in");
+     
         if(err)
         {
             req.flash("error",err.message);
@@ -154,7 +150,7 @@ router.post("/register",upload.single("userImage"), async(req, res,next)=>
            {
                
                req.flash("error","Duplicate credentials");
-               console.log(err);
+              
                return res.redirect("/register");
            }
            
@@ -199,7 +195,7 @@ router.post("/register",upload.single("userImage"), async(req, res,next)=>
           'If you did not request this, please ignore this email.\n'
       };
       smtpTransport.sendMail(mailOptions, function(err) {
-        console.log('mail sent');
+     
         req.flash('success', 'An e-mail has been sent to ' + user.email + 'to verify.');
         done(err, 'done');
       });
@@ -252,7 +248,7 @@ router.post("/verify/login/:token",function(req,res,next)
   
       user[0].lastLogIn=d;
       user[0].save()
-      console.log(verifyuser.verifyToken);
+    
     passport.authenticate("local",
     {
         successRedirect:"/verifyagain/"+verifyuser.verifyToken,
@@ -384,7 +380,7 @@ router.post('/forgot', function(req, res, next) {
           'If you did not request this, please ignore this email and your password will remain unchanged.\n'
       };
       smtpTransport.sendMail(mailOptions, function(err) {
-        console.log('mail sent');
+      
         req.flash('success', 'An e-mail has been sent to ' + user.email + ' with further instructions. Processing may take few minutes ');
         done(err, 'done');
       });
@@ -410,10 +406,10 @@ router.get("/verifyagain/:token",function(req,res)
   
   async.waterfall([
     function(done) {
-        console.log(req.params.token);
+       
       User.findOne({ verifyToken: req.params.token}, function(err, user) {
-        if (!user) {
-          console.log(user);
+        if (!user || !err) {
+         
           req.flash('error', 'Token is invalid');
           return res.redirect('back');
         }

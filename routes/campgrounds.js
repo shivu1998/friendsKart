@@ -66,7 +66,7 @@ var storage = multer.diskStorage({
     
   filename: function(req, file, callback) {
   
-      console.log("inside storage"+file);
+    
       
     callback(null, Date.now() + file.originalname);
      
@@ -75,8 +75,7 @@ var storage = multer.diskStorage({
 });
 var imageFilter = function (req, file, cb) {
     
-   console.log("inside imageFilter");
- console.log(file);
+  
   // upload file to S3
 
     // accept image files only
@@ -100,7 +99,8 @@ router.get("/upload",function(req,res)
     {
         if(err)
         {
-            console.log("Error!!!");
+            req.flash("error","Sorry,something went wrong");
+            res.redirect("back");
         }
         else{
             res.render("campgrounds/upload.ejs");
@@ -121,7 +121,8 @@ router.get("/campgrounds",function(req,res)
     {
         if(err)
         {
-            console.log("Error!!!");
+            req.flash("error","Sorry,something went wrong");
+            res.redirect("back");
         }
         else{
             if(camps.length < 1)
@@ -142,7 +143,8 @@ router.get("/campgrounds",function(req,res)
     {
         if(err)
         {
-            console.log("Error!!!");
+           req.flash("error","Sorry,something went wrong");
+            res.redirect("back");
         }
         else{
             res.render("campgrounds/index.ejs",{camps:camps});
@@ -197,7 +199,8 @@ router.get("/campgrounds/info/:id",function(req,res)
     {
         if(err)
         {
-            console.log("Error!!!");
+            req.flash("error","Sorry,something went wrong");
+            res.redirect("back");
         }
         else{
             res.send(camp);
@@ -207,15 +210,6 @@ router.get("/campgrounds/info/:id",function(req,res)
   
 });
 
-router.post("/resize",upload.single("image"),function(req, res) {
-  
-   console.log(req.file);
-   
-     
-   
-   
-   
-});
 
 router.post("/campgrounds",isLoggedIn,upload.single("image"),async (req,res) =>
 {
@@ -223,7 +217,7 @@ router.post("/campgrounds",isLoggedIn,upload.single("image"),async (req,res) =>
  
  
     await cloudinary.v2.uploader.upload(req.file.path,{crop: "thumb", width:442, height: 350,quality:"auto",fetch_format:"auto",flags:"lossy" },async (err,result) =>{
-        console.log("in");
+       
         if(err)
         {
             req.flash("error",err.message);
@@ -241,7 +235,7 @@ router.post("/campgrounds",isLoggedIn,upload.single("image"),async (req,res) =>
     };
    
 await   Camp.create(req.body.camp,function(err,camp)
-    { console.log("camp");
+    {
         if(err)
         {
             req.flash("error",err.message);
@@ -455,7 +449,7 @@ router.get("/campgrounds/buy/:id",isLoggedIn,function(req, res) {
               req.flash("error","Failed to send a mail to seller");
               return res.redirect("/campgrounds");
           }
-        console.log('mail sent');
+       
        
        
       });
@@ -493,7 +487,8 @@ router.get("/mykart/refresh",isLoggedIn,function(req, res) {
    Camp.find({requestedBy:req.user._id},function(err, camps) {
        if(err)
        {
-           console.log("no requested");
+          req.flash("error","Sorry,something went wrong");
+            res.redirect("back");
        }
        else
        {
@@ -509,7 +504,8 @@ router.get("/mykart",isLoggedIn,function(req, res) {
    Camp.find({requestedBy:req.user._id},function(err, camps) {
        if(err)
        {
-           console.log("no requested");
+            req.flash("error","Sorry,something went wrong");
+            res.redirect("back");
        }
        else
        {
@@ -709,7 +705,7 @@ router.post("/revoke/:id",isLoggedIn,function(req,res)
               req.flash("error","Failed to send a mail to buyer");
               return res.redirect("/campgrounds");
           }
-        console.log('mail sent');
+       
        
        
       });
@@ -818,7 +814,8 @@ router.get("/campgrounds/user/:id",isLoggedIn,function(req, res) {
    {
        if(err)
        {
-           console.log("error in user");
+          req.flash("error","Sorry,something went wrong");
+            res.redirect("back");
        }
        else
        {
@@ -836,7 +833,8 @@ router.get("/campgrounds/user/:id/refresh",isLoggedIn,function(req, res) {
    {
        if(err)
        {
-           console.log("error in user");
+          req.flash("error","Sorry,something went wrong");
+            res.redirect("back");
        }
        else
        {
@@ -888,7 +886,6 @@ router.get("/agree/:id",function(req, res) {
               req.flash("error","Failed to send a mail to buyer");
               return res.redirect("/campgrounds");
           }
-        console.log('mail sent');
        
        
       });
@@ -951,7 +948,7 @@ router.get("/product/accept/:id",isLoggedIn,function(req, res) {
               req.flash("error","Failed to send a mail to buyer");
               return res.redirect("/campgrounds");
           }
-        console.log('mail sent');
+     
        
        
       });
@@ -1034,7 +1031,7 @@ router.get("/product/decline/:id",isLoggedIn,function(req, res) {
               req.flash("error","Failed to send a mail to buyer");
               return res.redirect("/campgrounds");
           }
-        console.log('mail sent');
+    
        
        
       });

@@ -2,7 +2,8 @@ require('dotenv').config();
 var express = require("express");
 var app = express();
 var compression = require('compression');
-
+var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
 var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
 var passport = require("passport");
@@ -16,12 +17,11 @@ var userRoutes = require("./routes/users");
 var indexRoutes      = require("./routes/index");
 
 
-mongoose.connect("mongodb://localhost/friendskart_v15");//last element specifies to name of the database and this
+mongoose.connect("mongodb://shivu:shivu1998atmongolab@ds145752.mlab.com:45752/friendskart");
+
+//mongoose.connect("mongodb://localhost/friendskart_v15");//last element specifies to name of the database and this
 // line is used to create a database.
 
-var Camp = require("./models/campground");
-
-var Comment = require("./models/comments");
 
 app.use(express.static(__dirname+"/public"));
 
@@ -30,16 +30,27 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.use(methodOverride("_method"));
 app.use(flash());
 
-
+app.use(session({
+    secret:"csk sucks",
+    resave:"false",
+    saveUninitialized:"false",
+    store:new MongoStore({
+       url: "mongodb://shivu:shivu1998atmongolab@ds145752.mlab.com:45752/friendskart",
+       touchAfter: 24 * 3600
+    })
+    
+    
+}));
 // var seeds = require("./seed"); 
 
 // seeds();
 
-app.use(require("express-session")({
-    secret:"csk sucks",
-    resave:"false",
-    saveUninitialized:"false"
-}));
+// app.use(session({
+//     secret:"csk sucks",
+//     resave:"false",
+//     saveUninitialized:"false"
+    
+// }));
 
 app.use(passport.initialize());
 app.use(passport.session());

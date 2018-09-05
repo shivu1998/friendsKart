@@ -24,8 +24,8 @@ router.post("/campgrounds/:id/comments",isLoggedIn,function(req,res)
             {
                 if(err)
                 {
-                    req.flash("error","Sorry, something went wrong!!!");
-                    console.log("/campgrounds");
+                   req.flash("error","Sorry,something went wrong");
+                   res.redirect("back");
                 }
                 else
                 {
@@ -142,7 +142,7 @@ function belongsToMe(req,res,next)
             }
             else
             {
-                // console.log(comment);
+               
                 if(comment.author.id.equals(req.user._id) || req.user.isAdmin)
                 {
                     next();
