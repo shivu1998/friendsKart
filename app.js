@@ -16,7 +16,7 @@ var commentRoutes    = require("./routes/comments");
 var indexRoutes      = require("./routes/index");
 
 
-mongoose.connect("mongodb://shivu:shivu1998atmongolab@ds145752.mlab.com:45752/friendskart");
+mongoose.connect(process.env.database_url);
 
 //mongoose.connect("mongodb://localhost/friendskart_v15");//last element specifies to name of the database and this
 // line is used to create a database.
