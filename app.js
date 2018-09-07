@@ -4,6 +4,8 @@ var app = express();
 var compression = require('compression');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
+const url = require('url');
+const fixieUrl = url.parse(process.env.FIXIE_URL);
 var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
 var passport = require("passport");
@@ -74,7 +76,7 @@ app.use(campgroundRoutes);
 
 
 
-app.listen(process.env.PORT,process.env.IP,function(){
+app.listen(fixieUrl.port,fixieUrl.IP,function(){
     console.log("friendsKart Server has started");
     
 });
