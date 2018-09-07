@@ -13,7 +13,7 @@ router.use(compression());
 
 var db_config = {
    
-    host:"shareddb-i.hosting.stackcp.net",
+    host:"mysql.stackcp.com:51030",
     user : "chatapp-33378387",
     password : "pampwatv78",
     database :"chatapp-33378387",
