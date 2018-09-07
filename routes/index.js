@@ -296,7 +296,7 @@ router.post("/login",function(req,res,next)
     }
     else{
       
-      if(user)
+      if(user[0])
       {
             
       var d=new Date();
