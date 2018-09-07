@@ -315,7 +315,7 @@ router.post("/login",function(req,res,next)
         
       }else
       {
-         req.error("error","Please signUp");
+         req.flash("error","Please signUp");
       return res.redirect("back");
         
       }
