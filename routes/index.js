@@ -289,21 +289,22 @@ router.post("/login",function(req,res,next)
 {
   User.find({username:req.body.username},function(err,user)
   {
-    if(!err)
+    if(err)
     {
-    
+      req.error("error","Sorry!!!Something went wrong");
+      return res.redirect("back");
+    }
+    else{
       
+      if(user)
+      {
+            
       var d=new Date();
       d.setMinutes(d.getMinutes()+330);
   
       user[0].lastLogIn=d;
-      user[0].save()
-    }
-    
-    
-  });
-  
-    passport.authenticate("local",
+      user[0].save();
+        passport.authenticate("local",
     {
         successRedirect:"/campgrounds",
         failureRedirect:"/login",
@@ -311,6 +312,24 @@ router.post("/login",function(req,res,next)
         successFlash: "Welcome to friendsKart!"
     })(req, res);
    
+        
+      }else
+      {
+         req.error("error","Please signUp");
+      return res.redirect("back");
+        
+      }
+      
+    }
+      
+    
+  
+    
+    
+    
+  });
+  
+  
 });
 
 function isLoggedIn(req,res,next){
