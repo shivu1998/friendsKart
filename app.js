@@ -35,7 +35,7 @@ app.use(session({
     resave:"false",
     saveUninitialized:"false",
     store:new MongoStore({
-       url: "mongodb://shivu:shivu1998atmongolab@ds145752.mlab.com:45752/friendskart",
+       url: process.env.url,
        touchAfter: 24 * 3600
     })
     
